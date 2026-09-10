@@ -1,6 +1,7 @@
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
 import { getAllProjects } from './src/models/projects.js';
+import { getAllCategories } from './src/models/categories.js';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -38,15 +39,17 @@ app.get('/', async (req, res) => {
     res.render('home', { title });
 });
 
-/*
-app.get('/projects', async (req, res) => {
-    const title = 'Service Projects';
-    res.render('projects', { title });
-});
-*/
 app.get('/categories', async (req, res) => {
-    const title = 'Categories';
-    res.render('categories', { title });
+    try {
+        const categories = await getAllCategories();
+        res.render('categories', { 
+            title: 'Categories', 
+            categories 
+        });
+    } catch (err) {
+        console.error('Error fetching categories:', err);
+        res.status(500).send('Server Error');
+    }
 });
 
 app.get('/organizations', async (req, res) => {

@@ -2,11 +2,21 @@
     <main>
         <h1><%= title %></h1>
         <h2>Service Project Categories</h2>
-        <ul>
+        
+        <div class="categories-container" style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+            <% categories.forEach(category => { %>
+                <div class="category-card" style="background: #fff; padding: 20px 30px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eaeaea; min-width: 200px; text-align: center;">
+                    <h3 style="color: #1d3557; margin: 0;"><%= category.name %></h3>
+                </div>
+            <% }); %>
+        </div>
+        <!--
+        <ul 
             <li>Environmental</li>
             <li>Educational</li>
             <li>Community Service</li>
             <li>Health and Wellness</li>
         </ul>
+        -->
     </main>
     <%- include('partials/footer') %>
