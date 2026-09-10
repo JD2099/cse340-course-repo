@@ -1,5 +1,6 @@
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
+import { getAllProjects } from './src/models/projects.js';
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -37,11 +38,12 @@ app.get('/', async (req, res) => {
     res.render('home', { title });
 });
 
+/*
 app.get('/projects', async (req, res) => {
     const title = 'Service Projects';
     res.render('projects', { title });
 });
-
+*/
 app.get('/categories', async (req, res) => {
     const title = 'Categories';
     res.render('categories', { title });
@@ -52,6 +54,19 @@ app.get('/organizations', async (req, res) => {
     const title = 'Our Partner Organizations';
 
     res.render('organizations', { title, organizations });
+});
+
+app.get('/projects', async (req, res) => {
+    try {
+        const projects = await getAllProjects();
+        res.render('projects', { 
+            title: 'Service Projects', 
+            projects 
+        });
+    } catch (err) {
+        console.error('Error fetching projects:', err);
+        res.status(500).send('Server Error');
+    }
 });
 
 app.listen(PORT, async () => {
