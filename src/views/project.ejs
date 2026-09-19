@@ -1,16 +1,40 @@
 <%- include('partials/header') %>
-<main>
-    <h1><%= project.title %></h1>
+    <main>
+        <h1>
+            <%= project.title %>
+        </h1>
 
-    <p><strong>Description:</strong> <%= project.description %></p>
-    <p><strong>Date:</strong> <%= project.date %></p>
-    <p><strong>Location:</strong> <%= project.location %></p>
-    
-    <p>
-        <strong>Partner Organization:</strong> 
-        <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a>
-    </p>
+        <p><strong>Description:</strong>
+            <%= project.description %>
+        </p>
+        <p><strong>Date:</strong>
+            <%= project.date %>
+        </p>
+        <p><strong>Location:</strong>
+            <%= project.location %>
+        </p>
 
-    <p><a href="/projects">&larr; Back to Upcoming Projects</a></p>
-</main>
-<%- include('partials/footer') %>
+        <p>
+            <strong>Partner Organization:</strong>
+            <a href="/organization/<%= project.organization_id %>">
+                <%= project.organization_name %>
+            </a>
+        </p>
+
+        <div style="margin: 15px 0;">
+            <strong>Categories:</strong>
+            <% if (categories && categories.length> 0) { %>
+                <% categories.forEach(cat=> { %>
+                    <a href="/category/<%= cat.category_id %>"
+                        style="display: inline-block; background: #e2e8f0; padding: 4px 10px; margin-right: 5px; border-radius: 4px; text-decoration: none; color: #333; font-size: 0.9em;">
+                        <%= cat.name %>
+                    </a>
+                    <% }) %>
+                        <% } else { %>
+                            <span>None</span>
+                            <% } %>
+        </div>
+
+        <p><a href="/projects">&larr; Back to Upcoming Projects</a></p>
+    </main>
+    <%- include('partials/footer') %>
