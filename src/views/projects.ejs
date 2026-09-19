@@ -13,9 +13,16 @@
                     });
                 %>
                 <li>
-                    <h3 style="color: #1d3557; margin-bottom: 5px;"><%= project.title %></h3>
+                    <h3 style="color: #1d3557; margin-bottom: 5px;">
+                        <a href="/project/<%= project.project_id %>" style="text-decoration: none; color: inherit;">
+                            <%= project.title %>
+                        </a>
+                    </h3>
                     <p style="margin-top: 0; color: #555;">
-                        <%= project.organization_name %><br><%= formattedDate %>
+                        <a href="/organization/<%= project.organization_id %>">
+                            <%= project.organization_name %>
+                        </a>
+                        <br><%= formattedDate %>
                     </p>
                 </li>
             <% }); %>
