@@ -5,8 +5,8 @@ import { testConnection } from './src/models/db.js';
 import router from './src/routes.js';
 
 import session from 'express-session';
-
-import flash from './src/middleware/flash.js';
+import flash from "connect-flash";
+//import flash from './src/middleware/flash.js';
 
 const SESSION_SECRET = process.env.SESSION_SECRET;
 
@@ -39,7 +39,11 @@ app.use(session({
 }));
 
 // Use flash message middleware
-app.use(flash);
+app.use(flash());
+app.use((req, res, next) => {
+  res.locals.messages = req.flash();
+  next();
+});
 
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
