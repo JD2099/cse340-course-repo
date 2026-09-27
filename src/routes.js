@@ -1,4 +1,5 @@
 import express from 'express';
+import { body } from "express-validator";
 import { showHomePage } from './controllers/index.js';
 import { testErrorPage } from './controllers/errors.js';
 //ORGANIZATION
@@ -25,7 +26,11 @@ import {
     showCategoriesPage, 
     showCategoryDetailsPage, 
     showAssignCategoriesForm, 
-    processAssignCategoriesForm 
+    processAssignCategoriesForm,
+    showNewCategoryForm, 
+    processNewCategoryForm, 
+    showEditCategoryForm, 
+    processEditCategoryForm 
 } from './controllers/categories.js';
 
 
@@ -66,6 +71,19 @@ router.post('/new-project', projectValidation , processNewProjectForm);
 // Routes to handle the assign categories to project form
 router.get('/assign-categories/:projectId', showAssignCategoriesForm);
 router.post('/assign-categories/:projectId', processAssignCategoriesForm);
+router.get("/new-category", showNewCategoryForm);
+router.post(
+  "/new-category",
+  [ body("name").notEmpty().withMessage("Name is required").isLength({ min: 3, max: 100 }).withMessage("Name must be between 3 and 100 characters") ],
+  processNewCategoryForm
+);
+
+router.get("/edit-category/:id", showEditCategoryForm);
+router.post(
+  "/edit-category/:id",
+  [ body("name").notEmpty().withMessage("Name is required").isLength({ min: 3, max: 100 }).withMessage("Name must be between 3 and 100 characters") ],
+  processEditCategoryForm
+);
 router.get("/edit-project/:id", showEditProjectForm);
 router.post("/edit-project/:id", projectValidation, processEditProjectForm);
 
