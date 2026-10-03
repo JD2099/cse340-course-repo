@@ -51,7 +51,6 @@ const showNewProjectForm = async (req, res) => {
 const processNewProjectForm = async (req, res) => {
   const { title, description, location, date, organizationId } = req.body;
 
-  // ✅ 1. Revisar errores de validación
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     errors.array().forEach(error => {
@@ -61,10 +60,8 @@ const processNewProjectForm = async (req, res) => {
   }
 
   try {
-    // ✅ 2. Crear el nuevo proyecto en la base de datos
     const newProjectId = await createProject(title, description, location, date, organizationId);
 
-    // ✅ 3. Mensaje de éxito
     req.flash("success", "New service project created successfully!");
     res.redirect(`/project/${newProjectId}`);
   } catch (error) {
