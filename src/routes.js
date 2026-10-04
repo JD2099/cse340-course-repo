@@ -32,12 +32,24 @@ import {
     showEditCategoryForm, 
     processEditCategoryForm 
 } from './controllers/categories.js';
+//USERS
+import{
+  processUserRegistrationForm,
+  showUserRegistrationForm,
+  showLoginForm,
+  processLoginForm,
+  processLogout,
+  showDashboard,
+  requireLogin,
+  requireRole
+} from './controllers/users.js'
 
 
 import { showOrganizationDetailsPage } from './controllers/organizations.js';
 
 const router = express.Router();
 
+//BASE
 router.get('/', showHomePage);
 router.get('/organizations', showOrganizationsPage);
 router.get('/projects', showProjectsPage);
@@ -47,44 +59,52 @@ router.get('/category/:id', showCategoryDetailsPage);
 // error-handling routes
 router.get('/test-error', testErrorPage);
 
+//ORGANIZATION
 // Route for organization details page
 router.get('/organization/:id', showOrganizationDetailsPage);
-
 // Route for new organization page
-router.get('/new-organization', showNewOrganizationForm);
-
+router.get('/new-organization', requireRole('admin'), showNewOrganizationForm);
 // Route to handle new organization form submission
-router.post('/new-organization', organizationValidation, processNewOrganizationForm);
-
+router.post('/new-organization', requireRole('admin'), organizationValidation, processNewOrganizationForm);
 // Route to display the edit organization form
-router.get('/edit-organization/:id', showEditOrganizationForm);
-
+router.get('/edit-organization/:id', requireRole('admin'), showEditOrganizationForm);
 // Route to handle the edit organization form submission
-router.post('/edit-organization/:id', organizationValidation, processEditOrganizationForm);
+router.post('/edit-organization/:id', requireRole('admin'), organizationValidation, processEditOrganizationForm);
 
-// Route for new project page
-router.get('/new-project', showNewProjectForm);
-
-// Route to handle new project form submission
-router.post('/new-project', projectValidation , processNewProjectForm);
+//PROJECT
+router.get('/new-project', requireRole('admin'), showNewProjectForm);
+router.post('/new-project', requireRole('admin'), projectValidation , processNewProjectForm);
+router.get("/edit-project/:id", requireRole('admin'), showEditProjectForm);
+router.post("/edit-project/:id", requireRole('admin'), projectValidation, processEditProjectForm);
 
 // Routes to handle the assign categories to project form
-router.get('/assign-categories/:projectId', showAssignCategoriesForm);
-router.post('/assign-categories/:projectId', processAssignCategoriesForm);
-router.get("/new-category", showNewCategoryForm);
+router.get('/assign-categories/:projectId', requireRole('admin'), showAssignCategoriesForm);
+router.post('/assign-categories/:projectId', requireRole('admin'), processAssignCategoriesForm);
+
+//CATEGORY
+router.get("/new-category", requireRole('admin'), showNewCategoryForm);
 router.post(
-  "/new-category",
+  "/new-category", requireRole('admin'),
   [ body("name").notEmpty().withMessage("Name is required").isLength({ min: 3, max: 100 }).withMessage("Name must be between 3 and 100 characters") ],
   processNewCategoryForm
 );
-
-router.get("/edit-category/:id", showEditCategoryForm);
+router.get("/edit-category/:id",requireRole('admin'), showEditCategoryForm);
 router.post(
-  "/edit-category/:id",
+  "/edit-category/:id",requireRole('admin'),
   [ body("name").notEmpty().withMessage("Name is required").isLength({ min: 3, max: 100 }).withMessage("Name must be between 3 and 100 characters") ],
   processEditCategoryForm
 );
-router.get("/edit-project/:id", showEditProjectForm);
-router.post("/edit-project/:id", projectValidation, processEditProjectForm);
+
+
+
+// User registration routes
+router.get('/register', showUserRegistrationForm);
+router.post('/register', processUserRegistrationForm);
+// User login routes
+router.get('/login', showLoginForm);
+router.post('/login', processLoginForm);
+router.get('/logout', processLogout);
+// Protected dashboard route
+router.get('/dashboard', requireLogin, showDashboard);
 
 export default router;
