@@ -1,0 +1,59 @@
+<%- include('partials/header') %>
+<section class="users-page">
+    <div class="users-header">
+        <div>
+            <h1>Users Management</h1>
+            <p>Manage and view all registered users.</p>
+        </div>
+
+        <div class="users-count">
+            <span>Total users</span>
+            <strong><%= users.length %></strong>
+        </div>
+    </div>
+
+    <div class="users-card">
+        <div class="users-card-header">
+            <h2>Registered Users</h2>
+        </div>
+
+        <div class="users-table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <% users.forEach(user => { %>
+                        <tr>
+                            <td class="user-name">
+                                <%= user.name %>
+                            </td>
+                            <td>
+                                <%= user.email %>
+                            </td>
+                            <td>
+                                <span class="role-badge <%= user.role_name === 'admin' ? 'role-admin' : 'role-user' %>">
+                                    <%= user.role_name %>
+                                </span>
+                            </td>
+                        </tr>
+                    <% }); %>
+
+                    <% if (users.length === 0) { %>
+                        <tr>
+                            <td colspan="3" class="empty-users">
+                                No registered users found.
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+<%- include('partials/footer') %>

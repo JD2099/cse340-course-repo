@@ -7,5 +7,8 @@
     <% if (isLoggedIn) { %>
         <p><a href="/dashboard">My Dashboard</a></p>
     <% } %>
+    <% if (user && user.role_name === 'admin') { %>
+        <p><a href="/users">View Users</a></p>
+    <% } %>
     </main>
 <%- include('partials/footer') %>
